@@ -4,13 +4,13 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import org.controlsfx.control.spreadsheet.Grid;
 
+import java.net.URL;
 import java.time.LocalDate;
 
 public class AddDialog extends Dialog<Result> {
 
-    private GridPane dialogPane;
+    private GridPane gridPane;
     private Label taskLabel = new Label("Task:");
     private Label statusLabel = new Label("Status:");
     private Label priorityLabel = new Label("Priority:");;
@@ -24,11 +24,12 @@ public class AddDialog extends Dialog<Result> {
 
     public AddDialog(GridPane pane, Button addButton){
         //super(); Implicit call to parent class
-        this.dialogPane = pane;
+        this.gridPane = pane;
         addLabelsToPane();
         addInputsToPane();
         modifyInputs();
         setWindow();
+        customizeDialog();
 
         this.setResultConverter(buttonType -> {
             if (buttonType == ButtonType.CANCEL){
@@ -43,14 +44,15 @@ public class AddDialog extends Dialog<Result> {
 
     private void addLabelsToPane(){
         for (int i = 0; i<this.labels.length; i++){
+            labels[i].getStyleClass().add("label");
             labels[i].setFont(Font.font(16));
-            dialogPane.add(labels[i], 0, i);
+            gridPane.add(labels[i], 0, i);
         }
     }
 
     private void addInputsToPane(){
         for (int i = 0; i<this.inputs.length; i++){
-            dialogPane.add(inputs[i], 1, i);
+            gridPane.add(inputs[i], 1, i);
         }
     }
 
@@ -63,11 +65,11 @@ public class AddDialog extends Dialog<Result> {
     }
 
     private void setWindow(){
-        this.dialogPane.setPadding(new Insets(30));
+        this.gridPane.setPadding(new Insets(30));
         this.setHeaderText("Add a new task");
         this.setTitle("TrackTask (Task Management System)");
         this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        this.getDialogPane().setContent(this.dialogPane);
+        this.getDialogPane().setContent(this.gridPane);
     }
 
     public String getTaskInput(){
@@ -84,6 +86,11 @@ public class AddDialog extends Dialog<Result> {
 
     public LocalDate getDueDate(){
         return this.dueDatePicker.getValue();
+    }
+
+    private void customizeDialog(){
+        this.getDialogPane().getStyleClass().add("myDialog");
+        this.getDialogPane().getStylesheets().add(getClass().getResource("/org/example/taskmanagementsystem/styles/dialog.css").toExternalForm());
     }
 
 }

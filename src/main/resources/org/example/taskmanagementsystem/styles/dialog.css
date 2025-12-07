@@ -1,0 +1,14 @@
+.myDialog{
+    -fx-background-color: rgb(32, 33, 45);
+    -fx-fill: green;
+}
+
+.myDialog:header *.header-panel{
+    -fx-background-color: rgb(45, 45, 55);
+}
+
+.label{
+    -fx-text-fill: white;
+    -fx-color: white;
+    -fx-fill: white;
+}

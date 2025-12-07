@@ -57,6 +57,13 @@ public class Main extends Application {
         header.setSpacing(50);
         root.setTop(header);
 
+//        mainHeader.setStyle("-fx-fill: blue");
+        mainHeader.setId("mainHeader");
+        scene.getStylesheets().add(this.getClass().getResource("/org/example/taskmanagementsystem/styles/stylesheet.css").toExternalForm());
+
+        //CSS
+        // /org/example/taskmanagementsystem/styles/stylesheet.css
+        //CSS
 
         root.setStyle("-fx-background-color: rgb(32, 33, 45)");
         stage.setMinWidth(800);
