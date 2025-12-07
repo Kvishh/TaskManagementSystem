@@ -1,0 +1,13 @@
+.addButton{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-text-fill: white;
+    -fx-background-radius: 40px;
+}
+
+.addButton:hover{
+    -fx-background-color: rgb(138, 133, 242);
+}
+
+.addButton:active{
+    -fx-background-color: rgb(68, 64, 120);
+}

@@ -31,11 +31,9 @@ public class AddDialog extends Dialog<Result> {
         setWindow();
         customizeDialog();
 
+        //In Main, addDialog.showAndWait() returns Optional of type Result due to this
         this.setResultConverter(buttonType -> {
-            if (buttonType == ButtonType.CANCEL){
-                addButton.setStyle("-fx-background-color: rgb(98, 94, 192); -fx-text-fill: white; -fx-background-radius: 40px");
-            } else if(buttonType == ButtonType.OK){
-                addButton.setStyle("-fx-background-color: rgb(98, 94, 192); -fx-text-fill: white; -fx-background-radius: 40px");
+            if(buttonType == ButtonType.OK){
                 return new Result(this.getTaskInput(), this.getStatusOption(), this.getPriorityOption(), this.getDueDate());
             }
             return null;

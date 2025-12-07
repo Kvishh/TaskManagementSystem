@@ -27,6 +27,9 @@ public class Main extends Application {
         Scene scene = new Scene(root, 800, 600);//w=800, h=600
         Text mainHeader = new Text("TrackTask");
         Button addButton = new Button("+ Add new task");
+        addButton.getStyleClass().add("addButton");
+        addButton.setCursor(Cursor.HAND);
+        addButton.setMinSize(100, 40);
 
         // Space between the add button and text tracktask
         Region spacer = new Region();
@@ -38,14 +41,10 @@ public class Main extends Application {
         //scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
 
         mainHeader.setFont(Font.font("Tahoma", 34));
-        addButton.setMinSize(100, 40);
-        addButton.setCursor(Cursor.HAND);
 
-        addButton.setStyle("-fx-background-color: rgb(98, 94, 192); -fx-text-fill: white; -fx-background-radius: 40px");
         mainHeader.setFill(Color.WHITE);
 
         addButton.setOnMousePressed((e) -> {
-            addButton.setStyle("-fx-background-color: rgb(68, 64, 120); -fx-text-fill: white; -fx-background-radius: 40px");
             AddDialog addDialog = new AddDialog(new GridPane(10, 10), addButton);
 
             Optional<Result> result = addDialog.showAndWait();
@@ -58,7 +57,6 @@ public class Main extends Application {
         root.setTop(header);
 
 //        mainHeader.setStyle("-fx-fill: blue");
-        mainHeader.setId("mainHeader");
         scene.getStylesheets().add(this.getClass().getResource("/org/example/taskmanagementsystem/styles/stylesheet.css").toExternalForm());
 
         //CSS
@@ -68,6 +66,7 @@ public class Main extends Application {
         root.setStyle("-fx-background-color: rgb(32, 33, 45)");
         stage.setMinWidth(800);
         stage.setMinHeight(600);
+        stage.setResizable(false);
         stage.setTitle("TrackTask (Task Management System)");
         stage.setScene(scene);
         stage.show();
