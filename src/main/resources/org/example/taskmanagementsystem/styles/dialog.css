@@ -12,3 +12,78 @@
     -fx-color: white;
     -fx-fill: white;
 }
+
+.textInput{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-border-color: white;
+    -fx-border-width: .5px;
+    -fx-text-fill: white;
+}
+
+.options{
+    -fx-border-color: white;
+    -fx-border-width: .5px;
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-text-fill: white;
+}
+
+.options:hover{
+    -fx-background-color: rgb(47, 45, 84);
+    -fx-cursor: hand;
+}
+
+.options .list-cell{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-text-fill: white;
+}
+
+.options .list-cell:hover{
+    -fx-background-color: rgb(47, 45, 84);
+    -fx-cursor: hand;
+}
+
+.date-picker{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-border-width: .5px;
+    -fx-border-color: white;
+}
+
+.date-picker .text-field{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-text-fill: white;
+}
+
+.date-picker > .arrow-button{
+    -fx-background-color: rgb(98, 94, 192);
+}
+
+.date-picker-popup > * > .spinner {
+    -fx-background-color: rgb(47, 45, 84);
+}
+.date-picker-popup > * > .spinner > .button {
+    -fx-background-color: rgb(47, 45, 84);
+}
+
+.date-picker-popup > .calendar-grid{
+    -fx-background-color: rgb(47, 45, 84);
+}
+
+.date-picker-popup > * > .day-name-cell,
+.date-picker-popup > * > .week-number-cell {
+    -fx-border-color: white;
+    -fx-background-color: rgb(47, 45, 84);
+}
+
+.date-picker-popup > * > .date-cell{
+    -fx-background-color: rgb(67, 65, 112);
+    -fx-text-fill: white;
+}
+
+.date-picker-popup > * > .day-cell:hover{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-cursor: hand;
+}
+
+.date-picker-popup > .month-year-pane{
+    -fx-background-color: rgb(47, 45, 84);
+}

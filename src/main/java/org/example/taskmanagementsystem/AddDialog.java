@@ -1,5 +1,6 @@
 package org.example.taskmanagementsystem;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -57,8 +58,8 @@ public class AddDialog extends Dialog<Result> {
     private void modifyInputs(){
         this.taskInput.setPromptText("Task");
         this.statusOptions.getItems().addAll("To Do", "Done");
-        this.statusOptions.getSelectionModel().selectFirst();priorityOptions.getItems().addAll("Urgent", "Important", "Minor");
-        this.priorityOptions.getSelectionModel().selectFirst();
+        this.statusOptions.getSelectionModel().selectFirst();
+        this.priorityOptions.getItems().addAll("Urgent", "Important", "Minor");
         this.priorityOptions.getSelectionModel().selectFirst();
     }
 
@@ -88,6 +89,10 @@ public class AddDialog extends Dialog<Result> {
 
     private void customizeDialog(){
         this.getDialogPane().getStyleClass().add("myDialog");
+        this.taskInput.getStyleClass().add("textInput");
+        Platform.runLater(() -> taskInput.requestFocus());
+        this.statusOptions.getStyleClass().add("options");
+        this.priorityOptions.getStyleClass().add("options");
         this.getDialogPane().getStylesheets().add(getClass().getResource("/org/example/taskmanagementsystem/styles/dialog.css").toExternalForm());
     }
 
