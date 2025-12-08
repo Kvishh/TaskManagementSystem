@@ -6,10 +6,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
-import java.net.URL;
 import java.time.LocalDate;
 
-public class AddDialog extends Dialog<Result> {
+public class AddDialog extends Dialog<TaskModel> {
 
     private GridPane gridPane;
     private Label taskLabel = new Label("Task:");
@@ -34,8 +33,8 @@ public class AddDialog extends Dialog<Result> {
 
         //In Main, addDialog.showAndWait() returns Optional of type Result due to this
         this.setResultConverter(buttonType -> {
-            if(buttonType == ButtonType.OK){
-                return new Result(this.getTaskInput(), this.getStatusOption(), this.getPriorityOption(), this.getDueDate());
+            if(buttonType.getText().equals("Add")){
+                return new TaskModel(this.getTaskInput(), this.getStatusOption(), this.getPriorityOption(), this.getDueDate());
             }
             return null;
         });
@@ -67,7 +66,11 @@ public class AddDialog extends Dialog<Result> {
         this.gridPane.setPadding(new Insets(30));
         this.setHeaderText("Add a new task");
         this.setTitle("TrackTask (Task Management System)");
-        this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        this.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
+        this.getDialogPane().lookupButton(addButton).setId("addButton");
+        this.getDialogPane().lookupButton(cancelButton).setId("cancelButton");
         this.getDialogPane().setContent(this.gridPane);
     }
 

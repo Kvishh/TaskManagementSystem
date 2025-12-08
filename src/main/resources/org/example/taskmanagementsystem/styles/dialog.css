@@ -7,6 +7,26 @@
     -fx-background-color: rgb(45, 45, 55);
 }
 
+#addButton{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-text-fill: white;
+}
+
+#addButton:hover{
+    -fx-background-color: rgb(138, 133, 242);
+    -fx-cursor: hand;
+}
+
+#cancelButton{
+    -fx-background-color: rgb(98, 94, 192);
+    -fx-text-fill: white;
+}
+
+#cancelButton:hover{
+    -fx-background-color: rgb(138, 133, 242);
+    -fx-cursor: hand;
+}
+
 .label{
     -fx-text-fill: white;
     -fx-color: white;
@@ -53,13 +73,23 @@
     -fx-text-fill: white;
 }
 
+.date-picker .text-field:hover{
+    -fx-cursor: pointer;
+}
+
 .date-picker > .arrow-button{
     -fx-background-color: rgb(98, 94, 192);
+}
+
+.date-picker > .arrow-button:hover{
+    -fx-background-color: rgb(47, 45, 84);
+    -fx-cursor: hand;
 }
 
 .date-picker-popup > * > .spinner {
     -fx-background-color: rgb(47, 45, 84);
 }
+
 .date-picker-popup > * > .spinner > .button {
     -fx-background-color: rgb(47, 45, 84);
 }
