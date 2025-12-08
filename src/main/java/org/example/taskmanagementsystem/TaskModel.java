@@ -1,9 +1,6 @@
 package org.example.taskmanagementsystem;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
 
 import java.time.LocalDate;
@@ -12,8 +9,8 @@ public class TaskModel {
     private StringProperty task;
     private StringProperty status;
     private StringProperty priority;
-    private LocalDate dueDate;
-    private ImageView trashCanImage;
+    private ObjectProperty<LocalDate> dueDate;
+    private ObjectProperty<ImageView> trashCanImage;
             //= new ImageView(new Image("file:trashCanRegularFull.png", 32, 32, false, false));
     private BooleanProperty checked;
 
@@ -21,8 +18,8 @@ public class TaskModel {
         this.task = new SimpleStringProperty(task);
         this.status = new SimpleStringProperty(status);
         this.priority = new SimpleStringProperty(priority);
-        this.dueDate = dueDate;
-        this.trashCanImage = image;
+        this.dueDate = new SimpleObjectProperty<>(dueDate); //StringProperty (without the simple) is abstract, with Simple being the concrete class that implements/inherits the StringProperty
+        this.trashCanImage = new SimpleObjectProperty<>(image);
         this.checked = new SimpleBooleanProperty(checked) ;
     }
 
@@ -30,7 +27,7 @@ public class TaskModel {
         this.task = new SimpleStringProperty(task);
         this.status = new SimpleStringProperty(status);
         this.priority = new SimpleStringProperty(priority);
-        this.dueDate = dueDate;
+        this.dueDate = new SimpleObjectProperty<>(dueDate);
     }
 
     public StringProperty getTaskProperty() {
@@ -42,7 +39,7 @@ public class TaskModel {
     }
 
     public StringProperty getStatusProperty() {
-        return status;
+        return this.status;
     }
 
     public String getStatusValue(){
@@ -50,20 +47,22 @@ public class TaskModel {
     }
 
     public StringProperty getPriorityProperty() {
-        return priority;
+        return this.priority;
     }
 
-    public String getPriorityValue(){
-        return this.priority.getValue();
+    public String getPriorityValue(){ return this.priority.getValue(); }
+
+    public ObjectProperty<LocalDate> getDueDateProperty() {
+        return this.dueDate;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
+    public LocalDate getDueDateValue() { return this.dueDate.get(); }
+
+    public ObjectProperty<ImageView> getTrashCanImageProperty() {
+        return this.trashCanImage;
     }
 
-    public ImageView getTrashCanImage() {
-        return trashCanImage;
-    }
+    public ImageView getTrashCanValue() { return this.trashCanImage.getValue(); }
 
     public BooleanProperty checkedProperty() {
         return checked;
