@@ -4,9 +4,9 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,8 +15,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javax.xml.transform.Result;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 public class Main extends Application {
@@ -32,7 +33,8 @@ public class Main extends Application {
         Scene scene = new Scene(root, 800, 600);//w=800, h=600
         Text mainHeader = new Text("TrackTask");
         Button addButton = new Button("+ Add new task");
-        TableView<Result> table = new TableView<>();
+        TableView<TaskModel> table = new TableView<>();
+        table.setEditable(true);
         String url = "/org/example/taskmanagementsystem/styles/images/trashCanRegularFull.png";
 
 
@@ -57,14 +59,15 @@ public class Main extends Application {
         addButton.setOnMousePressed((e) -> {
             AddDialog addDialog = new AddDialog(new GridPane(10, 10), addButton);
 
-            Optional<Result> result = addDialog.showAndWait();
+            Optional<TaskModel> result = addDialog.showAndWait();
             result.ifPresent(res -> {
                 res.print();
-                table.getItems().add(new Result(res.getTask(),
-                        res.getStatus(),
-                        res.getPriority(),
+                table.getItems().add(new TaskModel(res.getTaskValue(),
+                        res.getStatusValue(),
+                        res.getPriorityValue(),
                         res.getDueDate(),
-                        new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false))));
+                        new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
+                        false));
                 //STRUCTURE:                       Task       Status  Priority     Due Date      trash can image
                 //table.getItems().add(new Result("Breathe", "To do", "Urgent", LocalDate.now(), trashCanImage));
             });
@@ -93,31 +96,33 @@ public class Main extends Application {
     }
 
     public void buildTable(TableView table, String url){
-        TableColumn done = new TableColumn("Done");
+        TableColumn<TaskModel, Boolean> done = new TableColumn<>("Done");
+        done.setCellValueFactory(d -> d.getValue().checkedProperty());
+        done.setCellFactory(CheckBoxTableCell.forTableColumn(done));
         done.setResizable(false);
         done.setMinWidth(103.3);
-        TableColumn task = new TableColumn("Task");
-        task.setCellValueFactory(new PropertyValueFactory<Result, String>("task"));
+        TableColumn<TaskModel, String> task = new TableColumn<>("Task");
+        task.setCellValueFactory(t -> t.getValue().getTaskProperty());
         task.setResizable(false);
         task.setMinWidth(220.7);
-        TableColumn status = new TableColumn("Status");
-        status.setCellValueFactory(new PropertyValueFactory<Result, String>("status"));
+        TableColumn<TaskModel, String> status = new TableColumn<>("Status");
+        status.setCellValueFactory(s -> s.getValue().getStatusProperty());
         status.setResizable(false);
         status.setMinWidth(123.3);
-        TableColumn priority = new TableColumn("Priority");
-        priority.setCellValueFactory(new PropertyValueFactory<Result, String>("priority"));
+        TableColumn<TaskModel, String> priority = new TableColumn<>("Priority");
+        priority.setCellValueFactory(p -> p.getValue().getPriorityProperty());
         priority.setResizable(false);
         priority.setMinWidth(123.3);
         TableColumn dueDate = new TableColumn("Due date");
-        dueDate.setCellValueFactory(new PropertyValueFactory<Result, LocalDate>("dueDate"));
+        dueDate.setCellValueFactory(new PropertyValueFactory<TaskModel, LocalDate>("dueDate"));
         dueDate.setResizable(false);
         dueDate.setMinWidth(123.3);
         TableColumn delete = new TableColumn("Delete");
-        delete.setCellValueFactory(new PropertyValueFactory<Result, ImageView>("trashCanImage"));
+        delete.setCellValueFactory(new PropertyValueFactory<TaskModel, ImageView>("trashCanImage"));
         delete.setResizable(false);
         delete.setMinWidth(103.3);
 
         table.getColumns().addAll(done, task, status, priority, dueDate, delete);
-        table.getItems().add(new Result("Finish final programming final project", "To do", "Urgent", LocalDate.now(), new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false))));
+        table.getItems().add(new TaskModel("Finish final programming final project", "To do", "Urgent", LocalDate.now(), new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)), false));
     }
 }
