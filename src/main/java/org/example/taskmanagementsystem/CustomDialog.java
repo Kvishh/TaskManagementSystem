@@ -8,7 +8,7 @@ import javafx.scene.text.Font;
 
 import java.time.LocalDate;
 
-public class AddDialog extends Dialog<TaskModel> {
+public class CustomDialog extends Dialog<TaskModel> {
 
     private GridPane gridPane;
     private Label taskLabel = new Label("Task:");
@@ -22,14 +22,25 @@ public class AddDialog extends Dialog<TaskModel> {
     private Label[] labels = {taskLabel, statusLabel, priorityLabel, dueDateLabel};;
     private Control[] inputs = {taskInput, statusOptions, priorityOptions, dueDatePicker};
 
-    public AddDialog(GridPane pane, Button addButton){
+    private String textPrimaryButton;
+
+    public CustomDialog(GridPane pane){
         //super(); Implicit call to parent class
         this.gridPane = pane;
+        this.gridPane.setPadding(new Insets(30));
+        this.setTitle("TrackTask (Task Management System)");
         addLabelsToPane();
         addInputsToPane();
         modifyInputs();
-        setWindow();
-        customizeDialog();
+
+        // Styling of dialog
+        this.getDialogPane().getStyleClass().add("myDialog");
+        this.taskInput.getStyleClass().add("textInput");
+        this.statusOptions.getStyleClass().add("options");
+        this.priorityOptions.getStyleClass().add("options");
+        this.getDialogPane().getStylesheets().add(getClass().getResource("/org/example/taskmanagementsystem/styles/dialog.css").toExternalForm());
+
+        Platform.runLater(() -> taskInput.requestFocus());
 
         //In Main, addDialog.showAndWait() returns Optional of type Result due to this
         this.setResultConverter(buttonType -> {
@@ -62,16 +73,50 @@ public class AddDialog extends Dialog<TaskModel> {
         this.priorityOptions.getSelectionModel().selectFirst();
     }
 
-    private void setWindow(){
-        this.gridPane.setPadding(new Insets(30));
-        this.setHeaderText("Add a new task");
-        this.setTitle("TrackTask (Task Management System)");
-        ButtonType addButton = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        this.getDialogPane().getButtonTypes().addAll(addButton, cancelButton);
-        this.getDialogPane().lookupButton(addButton).setId("addButton");
-        this.getDialogPane().lookupButton(cancelButton).setId("cancelButton");
+    public void setMyOwnHeaderText(String header){ //be called in Main
+        this.setHeaderText(header);
+    }
+
+    public void setHeaderTextPrimaryButton(String header){ //be called in Main
+        this.textPrimaryButton = header;
+    }
+
+    private ButtonType createPrimaryButton(){
+        return new ButtonType(this.textPrimaryButton, ButtonBar.ButtonData.OK_DONE);
+    }
+
+    private ButtonType createCancelButton(){
+        return new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+    }
+
+    private void addButtonsToDialog(){
+        ButtonType primaryButton = createPrimaryButton();
+        ButtonType cancelButton = createCancelButton();
+
+        this.getDialogPane().getButtonTypes().addAll(primaryButton, cancelButton);
+        this.getDialogPane().lookupButton(primaryButton).setId("primaryButton"); // prev value addButton
+        this.getDialogPane().lookupButton(cancelButton).setId("cancelButton"); //
+    }
+
+    public void buildDialog(){
+        addButtonsToDialog();
         this.getDialogPane().setContent(this.gridPane);
+    }
+
+    public void getAndSetTaskRow(String task){
+        this.taskInput.setText(task);
+    }
+
+    public void getAndSetStatusRow(String status){
+        this.statusOptions.setValue(status);
+    }
+
+    public void getAndSetPriorityRow(String priority){
+        this.priorityOptions.setValue(priority);
+    }
+
+    public void getAndSetDateRow(LocalDate date){
+        this.dueDatePicker.setValue(date);
     }
 
     public String getTaskInput(){
@@ -88,15 +133,6 @@ public class AddDialog extends Dialog<TaskModel> {
 
     public LocalDate getDueDate(){
         return this.dueDatePicker.getValue();
-    }
-
-    private void customizeDialog(){
-        this.getDialogPane().getStyleClass().add("myDialog");
-        this.taskInput.getStyleClass().add("textInput");
-        Platform.runLater(() -> taskInput.requestFocus());
-        this.statusOptions.getStyleClass().add("options");
-        this.priorityOptions.getStyleClass().add("options");
-        this.getDialogPane().getStylesheets().add(getClass().getResource("/org/example/taskmanagementsystem/styles/dialog.css").toExternalForm());
     }
 
 }
