@@ -44,7 +44,7 @@ public class CustomDialog extends Dialog<TaskModel> {
 
         //In Main, addDialog.showAndWait() returns Optional of type Result due to this
         this.setResultConverter(buttonType -> {
-            if(buttonType.getText().equals("Add")){
+             if (buttonType.getButtonData() == ButtonBar.ButtonData.OK_DONE){
                 return new TaskModel(this.getTaskInput(), this.getStatusOption(), this.getPriorityOption(), this.getDueDate());
             }
             return null;

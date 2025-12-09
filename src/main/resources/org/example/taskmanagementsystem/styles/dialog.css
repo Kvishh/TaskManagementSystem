@@ -7,14 +7,19 @@
     -fx-background-color: rgb(45, 45, 55);
 }
 
-#addButton{
+#primaryButton{
     -fx-background-color: rgb(98, 94, 192);
     -fx-text-fill: white;
 }
 
-#addButton:hover{
+#primaryButton:hover{
     -fx-background-color: rgb(138, 133, 242);
     -fx-cursor: hand;
+}
+
+#primaryButton:focused{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
 }
 
 #cancelButton{
@@ -25,6 +30,11 @@
 #cancelButton:hover{
     -fx-background-color: rgb(138, 133, 242);
     -fx-cursor: hand;
+}
+
+#cancelButton:focused{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
 }
 
 .label{
@@ -40,11 +50,21 @@
     -fx-text-fill: white;
 }
 
+.textInput:focused{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+}
+
 .options{
     -fx-border-color: white;
     -fx-border-width: .5px;
     -fx-background-color: rgb(98, 94, 192);
     -fx-text-fill: white;
+}
+
+.options:focused{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
 }
 
 .options:hover{
@@ -66,6 +86,11 @@
     -fx-background-color: rgb(98, 94, 192);
     -fx-border-width: .5px;
     -fx-border-color: white;
+}
+
+.date-picker:focused{
+    -fx-border-color: white;
+    -fx-border-width: 2px;
 }
 
 .date-picker .text-field{
