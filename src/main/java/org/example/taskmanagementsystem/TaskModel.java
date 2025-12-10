@@ -77,6 +77,8 @@ public class TaskModel {
 
     public boolean getCheckedValue(){ return checked.getValue(); }
 
+    public void setChecked(boolean check) {this.checked.setValue(check);}
+
     void print(){
         System.out.println(this.task + ", " + this.status + ", " + this.priority + ", " + this.dueDate);
     }

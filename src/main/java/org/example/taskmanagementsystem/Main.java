@@ -3,6 +3,8 @@ package org.example.taskmanagementsystem;
 import javafx.application.Application;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -69,11 +71,11 @@ public class Main extends Application {
             result.ifPresent(res -> {
                 if (!res.getTaskValue().isBlank()) { //isBlank (JAVA 11)
                     table.getItems().add(new TaskModel(res.getTaskValue(),
-                            res.getStatusValue(),
-                            res.getPriorityValue(),
-                            res.getDueDateValue(),
-                            new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
-                            false)
+                                    res.getStatusValue(),
+                                    res.getPriorityValue(),
+                                    res.getDueDateValue(),
+                                    new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
+                                    false)
 
                             //STRUCTURE:                       Task       Status  Priority     Due Date      trash can image
                             //table.getItems().add(new Result("Breathe", "To do", "Urgent", LocalDate.now(), trashCanImage));
@@ -106,9 +108,7 @@ public class Main extends Application {
     }
 
 
-
-
-    public void buildTable(TableView<TaskModel> table, String url){
+    public void buildTable(TableView<TaskModel> table, String url) {
         CustomDialog customDialog = new CustomDialog(new GridPane(10, 10));
         customDialog.setMyOwnHeaderText("Edit task");
         customDialog.setHeaderTextPrimaryButton("Done");
@@ -116,15 +116,46 @@ public class Main extends Application {
 
         TableColumn<TaskModel, Boolean> done = new TableColumn<>("Done");
         done.setCellValueFactory(d -> d.getValue().getCheckedProperty());
-        done.setCellFactory(CheckBoxTableCell.forTableColumn(done));
+        done.setCellFactory(x -> {
+
+            CheckBox checkBox = new CheckBox();
+            TableCell<TaskModel, Boolean> cell = new TableCell<>() {
+
+                @Override
+                protected void updateItem(Boolean item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null) {
+                        setGraphic(null);
+                    } else {
+                        checkBox.setSelected(item);
+                        setGraphic(checkBox);
+                    }
+                }
+            };
+
+            checkBox.selectedProperty().addListener(((observableValue, aBoolean, t1) -> {
+                cell.getTableRow().getItem().setChecked(t1);
+                boolean isChecked =  cell.getTableRow().getItem().getCheckedValue();
+
+                if (isChecked) {
+                    cell.getTableRow().getStyleClass().add("checked");
+                } else {
+                    cell.getTableRow().getStyleClass().remove("checked");
+                }
+            }));
+
+            return cell;
+        });
         done.setMinWidth(103.3);
+        done.getStyleClass().add("col-justify");
 
         TableColumn<TaskModel, String> task = new TableColumn<>("Task");
         task.setCellValueFactory(t -> t.getValue().getTaskProperty());
         task.setCellFactory(x -> {
             TableCell<TaskModel, String> cell = new TableCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty){
+                protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null) {
                         setText("");
@@ -134,7 +165,7 @@ public class Main extends Application {
                 }
             };
 
-            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt-> {
+            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked task");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
                 //System.out.println(rowItem.getTaskValue()); // this prints the task written in the clicked cell
@@ -155,7 +186,7 @@ public class Main extends Application {
         status.setCellFactory(x -> {
             TableCell<TaskModel, String> cell = new TableCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty){
+                protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null) {
                         setText("");
@@ -165,7 +196,7 @@ public class Main extends Application {
                 }
             };
 
-            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt-> {
+            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked status");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
@@ -185,7 +216,7 @@ public class Main extends Application {
 
             TableCell<TaskModel, String> cell = new TableCell<>() {
                 @Override
-                protected void updateItem(String item, boolean empty){
+                protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
                     if (item == null) {
                         setText("");
@@ -205,7 +236,7 @@ public class Main extends Application {
                 }
             };
 
-            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt-> {
+            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked priority");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
@@ -216,31 +247,6 @@ public class Main extends Application {
 
             return cell;
         });
-//        table.setRowFactory(tv -> {
-//            return new TableRow<TaskModel>() {
-//
-//                @Override
-//                public void updateItem(TaskModel row1, boolean empty) {
-//                    super.updateItem(row1, empty);
-//
-//                    if (row1 == null) {
-//                        setText("");
-//                    } else if (row1.getPriorityValue().equals("Urgent")) {
-//                        System.out.println("i got here");
-//                        System.out.println(row1.getTaskValue());
-//
-//                        getStyleClass().remove("urgent");
-//                        getStyleClass().add("urgent");
-//                    } else if (row1.getPriorityValue().equals("Important")) {
-//                        getStyleClass().remove("important");
-//                        getStyleClass().add("important");
-//                    } else if (row1.getPriorityValue().equals("Minor")) {
-//                        getStyleClass().remove("minor");
-//                        getStyleClass().add("minor");
-//                    }
-//                }
-//            };
-//        });
         priority.setMinWidth(123.3);
         priority.getStyleClass().add("col-justify");
 
@@ -249,10 +255,10 @@ public class Main extends Application {
         dueDate.setCellFactory(x -> {
             TableCell<TaskModel, LocalDate> cell = new TableCell<>() {
                 @Override
-                protected void updateItem(LocalDate item, boolean empty){
+                protected void updateItem(LocalDate item, boolean empty) {
                     super.updateItem(item, empty);
 
-                    if (item == null){
+                    if (item == null) {
                         setText("");
                     } else {
                         setText(item.format(DateTimeFormatter.ofPattern("EE, MMMM dd")));
@@ -260,7 +266,7 @@ public class Main extends Application {
                 }
             };
 
-            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt-> {
+            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked due date");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
@@ -274,15 +280,15 @@ public class Main extends Application {
         dueDate.setMinWidth(123.3);
         dueDate.getStyleClass().add("col-justify");
 
-        TableColumn<TaskModel, ImageView> delete = new TableColumn("Delete");
-        delete.setCellValueFactory( d -> d.getValue().getTrashCanImageProperty());
+        TableColumn<TaskModel, ImageView> delete = new TableColumn<>("Delete");
+        delete.setCellValueFactory(d -> d.getValue().getTrashCanImageProperty());
         delete.setCellFactory(x -> {
             TableCell<TaskModel, ImageView> cell = new TableCell<>() {
                 @Override
-                protected void updateItem(ImageView item, boolean empty){
+                protected void updateItem(ImageView item, boolean empty) {
                     super.updateItem(item, empty);
 
-                    if (item == null){
+                    if (item == null) {
                         setText("");
                     } else {
                         getStyleClass().remove("delete-cell");
@@ -292,7 +298,7 @@ public class Main extends Application {
                 }
             };
 
-            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt-> {
+            cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked delete");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
@@ -312,7 +318,7 @@ public class Main extends Application {
             c.setResizable(false);
         });
         table.getItems().add(new TaskModel("Finish final programming final project",
-                "To do",
+                "To Do",
                 "Urgent",
                 LocalDate.now(),
                 new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
@@ -326,12 +332,12 @@ public class Main extends Application {
             customDialog.getAndSetPriorityRow(rowItem.getPriorityValue());
             customDialog.getAndSetDateRow(rowItem.getDueDateValue());
 
-            Optional<TaskModel> result =  customDialog.showAndWait();
+            Optional<TaskModel> result = customDialog.showAndWait();
             result.ifPresent(res -> {
-                System.out.println("\nNew task value: "+res.getTaskValue());
-                System.out.println("New task value: "+res.getStatusValue());
-                System.out.println("New task value: "+res.getPriorityValue());
-                System.out.println("New task value: "+res.getDueDateValue());
+                System.out.println("\nNew task value: " + res.getTaskValue());
+                System.out.println("New task value: " + res.getStatusValue());
+                System.out.println("New task value: " + res.getPriorityValue());
+                System.out.println("New task value: " + res.getDueDateValue());
                 table.getSelectionModel().getSelectedItem().updateTask(res.getTaskValue());
                 table.getSelectionModel().getSelectedItem().updateStatus(res.getStatusValue());
                 table.getSelectionModel().getSelectedItem().updatePriority(res.getPriorityValue());
