@@ -11,3 +11,152 @@
 .addButton:active{
     -fx-background-color: rgb(68, 64, 120);
 }
+
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.col-left-center{
+    -fx-alignment: CENTER-LEFT;
+}
+
+.col-justify{
+    -fx-alignment: BASELINE-CENTER;
+}
+
+.table-view{
+    -fx-background-color: transparent;
+}
+
+.table-view:focused {
+    -fx-focus-color: black;
+}
+
+.table-view:focused .table-row-cell:focused {
+    -fx-background-insets: 0, 0 0 1 0;
+}
+
+.table-view .column-header-background .label{
+    -fx-text-fill: white;
+}
+
+.table-view .column-header{
+    -fx-background-color: linear-gradient(rgb(42, 40, 82), rgb(59, 57, 115));
+    -fx-text-fill: white;
+}
+
+.table-row-cell{
+    -fx-text-fill: white;
+    -fx-background-color: rgb(88, 85, 166);
+}
+
+.table-row-cell:selected{
+    -fx-background-color: rgb(50, 48, 97);
+    -fx-table-cell-border-color: white;
+}
+
+.table-row-cell:odd:selected{
+    -fx-background-color: rgb(50, 48, 97);
+    -fx-table-cell-border-color: white;
+}
+
+.table-row-cell:hover{
+    /*-fx-border-color: black;*/
+    -fx-background-color: rgb(50, 48, 97);
+}
+
+.table-row-cell:odd{
+    -fx-background-color: rgb(68, 64, 120);
+}
+
+.table-row-cell:odd:hover{
+    -fx-background-color: rgb(50, 48, 97);
+}
+
+.table-cell{
+    -fx-text-fill: white;
+}
+
+.table-cell:hover{
+    -fx-cursor: hand;
+}
+
+.table-row-cell:filled:selected{
+    -fx-border-color: black;
+}
+
+.table-row-cell:selected .check-box > .box{
+    -fx-background-color: #b4b4b4;
+}
+
+.urgent{
+    -fx-background-color: rgb(194, 31, 31);
+}
+
+.urgent:hover{
+    -fx-background-color: rgb(135, 20, 20);
+}
+
+.urgent:selected{
+    -fx-background-color: rgb(135, 20, 20);
+}
+
+.urgent:odd{
+    -fx-background-color: rgb(194, 31, 31);
+}
+
+.urgent:odd:hover{
+    -fx-background-color: rgb(135, 20, 20);
+}
+
+.urgent:odd:selected{
+    -fx-background-color: rgb(135, 20, 20);
+}
+
+.important{
+    -fx-background-color: rgb(194, 121, 31);
+}
+
+.important:hover{
+    -fx-background-color: rgb(135, 97, 20);
+}
+
+.important:selected{
+    -fx-background-color: rgb(135, 97, 20);
+}
+
+.important:odd{
+    -fx-background-color: rgb(194, 121, 31);
+}
+
+.important:odd:hover{
+    -fx-background-color: rgb(135, 97, 20);
+}
+
+.important:odd:selected{
+    -fx-background-color: rgb(135, 97, 20);
+}
+
+.minor{
+    -fx-background-color: rgb(201, 201, 10);
+}
+
+.minor:hover{
+    -fx-background-color: rgb(153, 153, 8);
+}
+
+.minor:selected{
+    -fx-background-color: rgb(153, 153, 8);
+}
+
+.minor:odd{
+    -fx-background-color: rgb(201, 201, 10);
+}
+
+.minor:odd:hover{
+    -fx-background-color: rgb(153, 153, 8);
+}
+
+.minor:odd:selected{
+    -fx-background-color: rgb(153, 153, 8);
+}
