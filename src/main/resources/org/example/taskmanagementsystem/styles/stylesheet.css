@@ -160,3 +160,11 @@
 .minor:odd:selected{
     -fx-background-color: rgb(153, 153, 8);
 }
+
+.delete-cell:hover{
+    -fx-background-color: rgb(232, 67, 67);
+}
+
+.delete-cell:odd:hover{
+    -fx-background-color: rgb(232, 67, 67);
+}

@@ -1,6 +1,8 @@
 package org.example.taskmanagementsystem;
 
 import javafx.application.Application;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -76,6 +78,7 @@ public class Main extends Application {
                             //STRUCTURE:                       Task       Status  Priority     Due Date      trash can image
                             //table.getItems().add(new Result("Breathe", "To do", "Urgent", LocalDate.now(), trashCanImage));
                     );
+                    table.refresh();
                 }
             });
         });
@@ -282,6 +285,8 @@ public class Main extends Application {
                     if (item == null){
                         setText("");
                     } else {
+                        getStyleClass().remove("delete-cell");
+                        getStyleClass().add("delete-cell");
                         setGraphic(item);
                     }
                 }
@@ -291,9 +296,10 @@ public class Main extends Application {
                 System.out.println("Clicked delete");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
-                System.out.println(rowItem.getCheckedValue());
+                table.getItems().remove(table.getSelectionModel().getSelectedIndex());
+                table.getSelectionModel().clearSelection();
+                table.refresh();
             });
-
             return cell;
         });
         delete.setMinWidth(103.3);
