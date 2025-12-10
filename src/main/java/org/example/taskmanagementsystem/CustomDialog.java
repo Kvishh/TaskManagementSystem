@@ -67,7 +67,7 @@ public class CustomDialog extends Dialog<TaskModel> {
 
     private void modifyInputs(){
         this.taskInput.setPromptText("Task");
-        this.statusOptions.getItems().addAll("To Do", "Done");
+        this.statusOptions.getItems().addAll("To Do");
         this.statusOptions.getSelectionModel().selectFirst();
         this.priorityOptions.getItems().addAll("Urgent", "Important", "Minor");
         this.priorityOptions.getSelectionModel().selectFirst();
