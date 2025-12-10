@@ -11,7 +11,6 @@ public class TaskModel {
     private StringProperty priority;
     private ObjectProperty<LocalDate> dueDate;
     private ObjectProperty<ImageView> trashCanImage;
-            //= new ImageView(new Image("file:trashCanRegularFull.png", 32, 32, false, false));
     private BooleanProperty checked;
 
     public TaskModel(String task, String status, String priority, LocalDate dueDate, ImageView image, Boolean checked){
@@ -38,6 +37,8 @@ public class TaskModel {
         return this.task.getValue();
     }
 
+    public void updateTask(String task) { this.task = new SimpleStringProperty(task); }
+
     public StringProperty getStatusProperty() {
         return this.status;
     }
@@ -46,11 +47,15 @@ public class TaskModel {
         return this.status.getValue();
     }
 
+    public void updateStatus(String status) { this.status = new SimpleStringProperty(status); }
+
     public StringProperty getPriorityProperty() {
         return this.priority;
     }
 
     public String getPriorityValue(){ return this.priority.getValue(); }
+
+    public void updatePriority(String priority) { this.priority = new SimpleStringProperty(priority); }
 
     public ObjectProperty<LocalDate> getDueDateProperty() {
         return this.dueDate;
@@ -58,15 +63,19 @@ public class TaskModel {
 
     public LocalDate getDueDateValue() { return this.dueDate.get(); }
 
+    public void updateDueDate(LocalDate date) { this.dueDate = new SimpleObjectProperty<>(date); }
+
     public ObjectProperty<ImageView> getTrashCanImageProperty() {
         return this.trashCanImage;
     }
 
     public ImageView getTrashCanValue() { return this.trashCanImage.getValue(); }
 
-    public BooleanProperty checkedProperty() {
+    public BooleanProperty getCheckedProperty() {
         return checked;
     }
+
+    public boolean getCheckedValue(){ return checked.getValue(); }
 
     void print(){
         System.out.println(this.task + ", " + this.status + ", " + this.priority + ", " + this.dueDate);
