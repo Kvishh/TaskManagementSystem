@@ -22,6 +22,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -50,9 +52,10 @@ public class Main extends Application {
             if (source == null || source instanceof TableRow<?> && ((TableRow) source).isEmpty()) table.getSelectionModel().clearSelection();
         });
 
-        //new Database().connect();
+        Database db = new Database();
+        retrieveAndPopulate(table, db, url);
 
-        buildTable(table, url);
+        buildTable(table, url, db);
 
         addButton.getStyleClass().add("addButton");
         addButton.setCursor(Cursor.HAND);
@@ -79,12 +82,15 @@ public class Main extends Application {
             Optional<TaskModel> result = customDialog.showAndWait();
             result.ifPresent(res -> {
                 if (!res.getTaskValue().isBlank()) { //isBlank (JAVA 11)
+                    int key = db.add(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), res.getDueDateValue().toString());
+
                     table.getItems().add(new TaskModel(res.getTaskValue(),
                                     res.getStatusValue(),
                                     res.getPriorityValue(),
                                     res.getDueDateValue(),
                                     new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
-                                    false)
+                                    false,
+                                    key)
 
                             //STRUCTURE:                       Task       Status  Priority     Due Date      trash can image
                             //table.getItems().add(new Result("Breathe", "To do", "Urgent", LocalDate.now(), trashCanImage));
@@ -117,11 +123,29 @@ public class Main extends Application {
     }
 
 
-    public void buildTable(TableView<TaskModel> table, String url) {
+    public void buildTable(TableView<TaskModel> table, String url, Database db) {
         CustomDialog customDialog = new CustomDialog(new GridPane(10, 10));
         customDialog.setMyOwnHeaderText("Edit task");
         customDialog.setHeaderTextPrimaryButton("Done");
         customDialog.buildDialog();
+
+        TableColumn<TaskModel, Number> id = new TableColumn<>("Id");
+        id.setCellValueFactory(i -> i.getValue().getIdProperty());
+        id.setCellFactory(x -> {
+            return new TableCell<TaskModel, Number>(){
+                @Override
+                protected void updateItem(Number number, boolean b) {
+                    super.updateItem(number, b);
+
+                    if (number == null){
+                        setText(null);
+                    } else {
+                        setText(String.valueOf(number));
+                    }
+                }
+            };
+        });
+        id.setVisible(false);
 
         TableColumn<TaskModel, Boolean> done = new TableColumn<>("Done");
         done.setCellValueFactory(d -> d.getValue().getCheckedProperty());
@@ -149,8 +173,10 @@ public class Main extends Application {
 
                 if (isChecked) {
                     cell.getTableRow().getStyleClass().add("checked");
+                    db.updateDone(isChecked, cell.getTableRow().getItem().getIdValue());
                 } else {
                     cell.getTableRow().getStyleClass().remove("checked");
+                    db.updateDone(isChecked, cell.getTableRow().getItem().getIdValue());
                 }
             }));
 
@@ -176,12 +202,12 @@ public class Main extends Application {
 
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked task");
+                System.out.println(cell.getTableRow().getItem().getIdValue());
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
                 //System.out.println(rowItem.getTaskValue()); // this prints the task written in the clicked cell
                 //System.out.println(rowItem.getDueDateValue());
                 if (evt.getClickCount() == 2) {
-                    //showEditDialog(customDialog, rowItem, table);
-                    showEditDialog(customDialog, rowItem, table);
+                    showEditDialog(customDialog, rowItem, table, db);
                 }
             });
 
@@ -210,7 +236,7 @@ public class Main extends Application {
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
                 if (evt.getClickCount() == 2) {
-                    showEditDialog(customDialog, rowItem, table);
+                    showEditDialog(customDialog, rowItem, table, db);
                 }
             });
 
@@ -250,7 +276,7 @@ public class Main extends Application {
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
                 if (evt.getClickCount() == 2) {
-                    showEditDialog(customDialog, rowItem, table);
+                    showEditDialog(customDialog, rowItem, table, db);
                 }
             });
 
@@ -280,7 +306,7 @@ public class Main extends Application {
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
                 if (evt.getClickCount() == 2) {
-                    showEditDialog(customDialog, rowItem, table);
+                    showEditDialog(customDialog, rowItem, table, db);
                 }
             });
 
@@ -311,6 +337,8 @@ public class Main extends Application {
                 System.out.println("Clicked delete");
                 TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
 
+                System.out.println(cell.getTableRow().getItem().getIdValue());
+                db.deleteTask(cell.getTableRow().getItem().getIdValue());
                 table.getItems().remove(table.getSelectionModel().getSelectedIndex());
                 table.getSelectionModel().clearSelection();
                 table.refresh();
@@ -326,15 +354,15 @@ public class Main extends Application {
             c.setReorderable(false);
             c.setResizable(false);
         });
-        table.getItems().add(new TaskModel("Finish final programming final project",
-                "To Do",
-                "Urgent",
-                LocalDate.now(),
-                new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
-                false));
+//        table.getItems().add(new TaskModel("Finish final programming final project",
+//                "To Do",
+//                "Urgent",
+//                LocalDate.now(),
+//                new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
+//                false));
     }
 
-    private void showEditDialog(CustomDialog customDialog, TaskModel rowItem, TableView<TaskModel> table) {
+    private void showEditDialog(CustomDialog customDialog, TaskModel rowItem, TableView<TaskModel> table, Database db) {
         try {
             customDialog.getAndSetTaskRow(rowItem.getTaskValue());
             customDialog.getAndSetStatusRow(rowItem.getStatusValue());
@@ -347,6 +375,9 @@ public class Main extends Application {
                 System.out.println("New task value: " + res.getStatusValue());
                 System.out.println("New task value: " + res.getPriorityValue());
                 System.out.println("New task value: " + res.getDueDateValue());
+                System.out.println("New task value: " + table.getSelectionModel().getSelectedItem().getIdValue());
+                db.updateTask(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), res.getDueDateValue().toString(), table.getSelectionModel().getSelectedItem().getIdValue());
+
                 table.getSelectionModel().getSelectedItem().updateTask(res.getTaskValue());
                 table.getSelectionModel().getSelectedItem().updateStatus(res.getStatusValue());
                 table.getSelectionModel().getSelectedItem().updatePriority(res.getPriorityValue());
@@ -357,6 +388,25 @@ public class Main extends Application {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("The row clicked is null. There is nothing to edit.");
+        }
+    }
+
+    private void retrieveAndPopulate(TableView<TaskModel> table, Database db, String url){
+        try {
+            ResultSet rs = db.retrieve();
+            while (rs.next()) {
+                table.getItems().add(new TaskModel(rs.getString("Task"),
+                        rs.getString("Status"),
+                        rs.getString("Priority"),
+                        LocalDate.parse(rs.getString("Due_date")) ,
+                        new ImageView(new Image(getClass().getResourceAsStream(url), 24, 24, true, false)),
+                        rs.getInt("Done") == 1 ? true : false,
+                        rs.getInt("Id"))
+                );
+                table.refresh();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
