@@ -104,22 +104,4 @@ public class Database {
             e.printStackTrace();
         }
     }
-//    public void connect(){
-//        try {
-//             Statement stmt =  connection.createStatement();
-//
-//             stmt.execute("CREATE TABLE IF NOT EXISTS tasks(" +
-//                     "Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-//                     "Done INTEGER NOT NULL," +
-//                     "Task TEXT NOT NULL," +
-//                     "Status TEXT NOT NULL," +
-//                     "Priority TEXT NOT NULL," +
-//                     "Due_date TEXT NOT NULL)");
-//
-//             stmt.execute("INSERT INTO myTable2 (Done, Task, Status, Priority, \"Due_date\") VALUES(1, \"finish project\", \"to do\", \"urgent\", \"2025-12-11\")");
-//        } catch (SQLException e) {
-//             throw new RuntimeException(e);
-//        }
-//
-//    }
 }
