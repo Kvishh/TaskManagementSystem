@@ -9,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -42,6 +43,14 @@ public class Main extends Application {
         table.setEditable(true);
         String url = "/org/example/taskmanagementsystem/styles/images/trashCanRegularFull.png";
 
+        scene.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
+            Node source = evt.getPickResult().getIntersectedNode();
+            while (source!=null && !(source instanceof TableRow<?>)) source = source.getParent();
+
+            if (source == null || source instanceof TableRow<?> && ((TableRow) source).isEmpty()) table.getSelectionModel().clearSelection();
+        });
+
+        //new Database().connect();
 
         buildTable(table, url);
 
