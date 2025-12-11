@@ -129,10 +129,8 @@ public class TableCreator {
 
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked task");
-                System.out.println(cell.getTableRow().getItem().getIdValue());
                 TaskModel rowItem = this.table.getSelectionModel().getSelectedItem();
-                //System.out.println(rowItem.getTaskValue()); // this prints the task written in the clicked cell
-                //System.out.println(rowItem.getDueDateValue());
+
                 if (evt.getClickCount() == 2) {
                     showEditDialog(rowItem);
                 }
@@ -264,14 +262,18 @@ public class TableCreator {
             };
 
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
-                System.out.println("Clicked delete");
-                //TaskModel rowItem = (TaskModel) table.getSelectionModel().getSelectedItem();
+                try {
+                    System.out.println("Clicked delete");
 
-                System.out.println(cell.getTableRow().getItem().getIdValue());
-                this.db.deleteTask(cell.getTableRow().getItem().getIdValue());
-                this.table.getItems().remove(this.table.getSelectionModel().getSelectedIndex());
-                this.table.getSelectionModel().clearSelection();
-                this.table.refresh();
+                    System.out.println("Id of deleted row: " + cell.getTableRow().getItem().getIdValue());
+                    this.db.deleteTask(cell.getTableRow().getItem().getIdValue());
+                    this.table.getItems().remove(this.table.getSelectionModel().getSelectedIndex());
+                    this.table.getSelectionModel().clearSelection();
+                    this.table.refresh();
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                    System.out.println("The row clicked is null. There is nothing to delete.");
+                }
             });
             return cell;
         });
@@ -292,7 +294,7 @@ public class TableCreator {
                 System.out.println("New status value: " + res.getStatusValue());
                 System.out.println("New priority value: " + res.getPriorityValue());
                 System.out.println("New dueDate value: " + res.getDueDateValue());
-                System.out.println("New id value: " + this.table.getSelectionModel().getSelectedItem().getIdValue());
+                System.out.println("New id value: " + this.table.getSelectionModel().getSelectedItem().getIdValue() + "\n");
                 this.db.updateTask(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), res.getDueDateValue().toString(), this.table.getSelectionModel().getSelectedItem().getIdValue());
 
                 this.table.getSelectionModel().getSelectedItem().updateTask(res.getTaskValue());
@@ -304,7 +306,6 @@ public class TableCreator {
             this.table.getSelectionModel().clearSelection();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();
             System.out.println("The row clicked is null. There is nothing to edit.");
         }
     }
