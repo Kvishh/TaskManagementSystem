@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import java.time.LocalDate;
 
 public class TaskModel {
+    private IntegerProperty id;
     private StringProperty task;
     private StringProperty status;
     private StringProperty priority;
@@ -13,13 +14,14 @@ public class TaskModel {
     private ObjectProperty<ImageView> trashCanImage;
     private BooleanProperty checked;
 
-    public TaskModel(String task, String status, String priority, LocalDate dueDate, ImageView image, Boolean checked){
+    public TaskModel(String task, String status, String priority, LocalDate dueDate, ImageView image, Boolean checked, int id){
+        this.id = new SimpleIntegerProperty(id);
         this.task = new SimpleStringProperty(task);
         this.status = new SimpleStringProperty(status);
         this.priority = new SimpleStringProperty(priority);
         this.dueDate = new SimpleObjectProperty<>(dueDate); //StringProperty (without the simple) is abstract, with Simple being the concrete class that implements/inherits the StringProperty
         this.trashCanImage = new SimpleObjectProperty<>(image);
-        this.checked = new SimpleBooleanProperty(checked) ;
+        this.checked = new SimpleBooleanProperty(checked);
     }
 
     public TaskModel(String task, String status, String priority, LocalDate dueDate){
@@ -29,6 +31,10 @@ public class TaskModel {
         this.dueDate = new SimpleObjectProperty<>(dueDate);
     }
 
+    public IntegerProperty getIdProperty() { return id; }
+
+    public int getIdValue() { return id.getValue(); }
+
     public StringProperty getTaskProperty() {
         return task;
     }
@@ -37,7 +43,7 @@ public class TaskModel {
         return this.task.getValue();
     }
 
-    public void updateTask(String task) { this.task = new SimpleStringProperty(task); }
+    public void updateTask(String task) {this.task.setValue(task); }
 
     public StringProperty getStatusProperty() {
         return this.status;
@@ -47,7 +53,7 @@ public class TaskModel {
         return this.status.getValue();
     }
 
-    public void updateStatus(String status) { this.status = new SimpleStringProperty(status); }
+    public void updateStatus(String status) { this.status.setValue(status);}
 
     public StringProperty getPriorityProperty() {
         return this.priority;
@@ -55,7 +61,7 @@ public class TaskModel {
 
     public String getPriorityValue(){ return this.priority.getValue(); }
 
-    public void updatePriority(String priority) { this.priority = new SimpleStringProperty(priority); }
+    public void updatePriority(String priority) { this.priority.setValue(priority); }
 
     public ObjectProperty<LocalDate> getDueDateProperty() {
         return this.dueDate;
@@ -63,7 +69,7 @@ public class TaskModel {
 
     public LocalDate getDueDateValue() { return this.dueDate.get(); }
 
-    public void updateDueDate(LocalDate date) { this.dueDate = new SimpleObjectProperty<>(date); }
+    public void updateDueDate(LocalDate date) { this.dueDate.setValue(date); }
 
     public ObjectProperty<ImageView> getTrashCanImageProperty() {
         return this.trashCanImage;
