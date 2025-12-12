@@ -72,6 +72,8 @@ public class UserInterface {
 
         this.root.setTop(header);
         this.root.setCenter(table);
+
+        addTaskButtonHandler();
     }
 
     private void rowLoseSelection(){
