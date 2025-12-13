@@ -346,17 +346,21 @@ public class TableCreator {
 
             Optional<TaskModel> result = this.customDialog.showAndWait();
             result.ifPresent(res -> {
+                String date = this.customDialog.getDatePicker().getEditor().getText().replace("/", "-");
+                LocalDate actualDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+
                 System.out.println("\nNew task value: " + res.getTaskValue());
                 System.out.println("New status value: " + res.getStatusValue());
                 System.out.println("New priority value: " + res.getPriorityValue());
-                System.out.println("New dueDate value: " + res.getDueDateValue());
+                System.out.println("New dueDate value: " + actualDate);
                 System.out.println("New id value: " + this.table.getSelectionModel().getSelectedItem().getIdValue() + "\n");
-                this.db.updateTask(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), res.getDueDateValue().toString(), this.table.getSelectionModel().getSelectedItem().getIdValue());
+
+                this.db.updateTask(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), actualDate.toString(), this.table.getSelectionModel().getSelectedItem().getIdValue());
 
                 this.table.getSelectionModel().getSelectedItem().updateTask(res.getTaskValue());
                 this.table.getSelectionModel().getSelectedItem().updateStatus(res.getStatusValue());
                 this.table.getSelectionModel().getSelectedItem().updatePriority(res.getPriorityValue());
-                this.table.getSelectionModel().getSelectedItem().updateDueDate(res.getDueDateValue());
+                this.table.getSelectionModel().getSelectedItem().updateDueDate(actualDate);
                 this.table.refresh();
             });
             this.table.getSelectionModel().clearSelection();

@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 /*
@@ -126,13 +127,16 @@ public class UserInterface {
 
             Optional<TaskModel> result = customDialog.showAndWait();
             result.ifPresent(res -> {
+                String date = customDialog.getDatePicker().getEditor().getText().replace("/", "-");
+                LocalDate actualDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+
                 if (!res.getTaskValue().isBlank()) { //isBlank (JAVA 11)
                     int key = this.database.add(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), res.getDueDateValue().toString());
 
                     this.table.getItems().add(new TaskModel(res.getTaskValue(),
                                     res.getStatusValue(),
                                     res.getPriorityValue(),
-                                    res.getDueDateValue(),
+                                    actualDate,
                                     new ImageView(new Image(getClass().getResourceAsStream(imagePath), 24, 24, true, false)),
                                     false,
                                     key)

@@ -138,4 +138,8 @@ public class CustomDialog extends Dialog<TaskModel> {
         return this.dueDatePicker.getValue();
     }
 
+    public DatePicker getDatePicker(){
+        return this.dueDatePicker;
+    }
+
 }
