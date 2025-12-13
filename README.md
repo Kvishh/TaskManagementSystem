@@ -8,7 +8,7 @@ a visual cue if it is most important or the least important. The tasks they have
 however, it will not disappear until they have chosen to delete it. The tasks also persist even though the
 program has been stopped running. Users can always expect the tasks they have added remain in the application.
 
-## IMPORTANT
+## **IMPORTANT**
 Git clone this repo.
 
 In order for this to run, you need to have **Java 11** since if you have other version of Java, be it Java 17,
