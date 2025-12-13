@@ -35,12 +35,17 @@ public class UserInterface {
     private final Text mainHeader = new Text("TrackTask");
     private final Button addButton = new Button("+ Add new task");
     private final Database database = new Database();
-    private final CustomDialog customDialog = new CustomDialog(new GridPane(10, 10));
+    private final CustomDialog customDialog;
     private final String imagePath = "/org/example/taskmanagementsystem/styles/images/trashCanRegularFull.png";
     private final String mainStylePath = "/org/example/taskmanagementsystem/styles/mainStyle.css";
     private final Region spacer = new Region();
 
     public UserInterface(){
+        GridPane pane = new GridPane();
+        pane.setHgap(10);
+        pane.setVgap(10);
+        this.customDialog = new CustomDialog(pane);
+
         this.scene = new Scene(this.root, 800, 600);
         this.tableCreator = new TableCreator(this.database, this.customDialog);
         this.table = this.tableCreator.getTable();
@@ -111,7 +116,10 @@ public class UserInterface {
 
     private void addTaskButtonHandler(){
         this.addButton.setOnMousePressed((e) -> {
-            CustomDialog customDialog = new CustomDialog(new GridPane(10, 10));
+            GridPane pane = new GridPane();
+            pane.setVgap(10);
+            pane.setHgap(10);
+            CustomDialog customDialog = new CustomDialog(pane);
             customDialog.setMyOwnHeaderText("Add a new task");
             customDialog.setHeaderTextPrimaryButton("Add");
             customDialog.buildDialog();
