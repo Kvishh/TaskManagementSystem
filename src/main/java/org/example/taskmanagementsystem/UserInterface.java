@@ -128,7 +128,7 @@ public class UserInterface {
             Optional<TaskModel> result = customDialog.showAndWait();
             result.ifPresent(res -> {
                 String date = customDialog.getDatePicker().getEditor().getText().replace("/", "-");
-                LocalDate actualDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+                LocalDate actualDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("M-d-yyyy"));
 
                 if (!res.getTaskValue().isBlank()) { //isBlank (JAVA 11)
                     int key = this.database.add(res.getTaskValue(), res.getStatusValue(), res.getPriorityValue(), res.getDueDateValue().toString());

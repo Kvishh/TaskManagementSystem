@@ -347,7 +347,7 @@ public class TableCreator {
             Optional<TaskModel> result = this.customDialog.showAndWait();
             result.ifPresent(res -> {
                 String date = this.customDialog.getDatePicker().getEditor().getText().replace("/", "-");
-                LocalDate actualDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+                LocalDate actualDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("M-d-yyyy"));
 
                 System.out.println("\nNew task value: " + res.getTaskValue());
                 System.out.println("New status value: " + res.getStatusValue());
