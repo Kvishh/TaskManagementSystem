@@ -15,11 +15,16 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
+
+/*
+* This class is responsible for the view and controller of the program.
+* This is where every other class are instantiated and used instead of
+* calling everything in Main class.
+* */
 
 public class UserInterface {
     private final Scene scene;
@@ -50,7 +55,7 @@ public class UserInterface {
         this.customDialog.setHeaderTextPrimaryButton("Done");
         this.customDialog.buildDialog();
 
-        rowLoseSelection();
+        loseRowSelection();
         retrieveAndPopulate();
 
         this.addButton.getStyleClass().add("addButton");
@@ -76,7 +81,7 @@ public class UserInterface {
         addTaskButtonHandler();
     }
 
-    private void rowLoseSelection(){
+    private void loseRowSelection(){
         this.scene.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
             Node source = evt.getPickResult().getIntersectedNode();
             while (source!=null && !(source instanceof TableRow<?>)) source = source.getParent();

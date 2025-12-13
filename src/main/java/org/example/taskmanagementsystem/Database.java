@@ -2,6 +2,12 @@ package org.example.taskmanagementsystem;
 
 import java.sql.*;
 
+/*
+* This class is responsible for the connection between the database
+* to the program. It is the model of the program. This class provides
+* method for selecting, inserting, updating, and deleting to the database.
+* */
+
 public class Database {
 
     private final String url = "jdbc:sqlite:src/main/db/tasks.sqlite";

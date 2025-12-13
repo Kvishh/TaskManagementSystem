@@ -2,8 +2,19 @@ package org.example.taskmanagementsystem;
 
 import javafx.beans.property.*;
 import javafx.scene.image.ImageView;
-
 import java.time.LocalDate;
+
+/*
+* This is an object model for the table view. When instantiating a TableView class,
+* you need to specify the type of object that will be contained withing the table.
+* Since the table includes String, Integer, Boolean, and Objects, they have been
+* compiled to one object type.
+* The attributes of this class all implements the interface ObservableValue (e.g.
+* StringProperty, IntegerProperty) since the TableColumn's cellValueFactory attribute
+* needs the type to be ObservableValue. It needs to implement ObservableValue because
+* ObservableValue has a method addListener, TableColumn uses this so it could reflect
+* the updates done from and on the cell by user.
+* */
 
 public class TaskModel {
     private IntegerProperty id;
@@ -19,7 +30,7 @@ public class TaskModel {
         this.task = new SimpleStringProperty(task);
         this.status = new SimpleStringProperty(status);
         this.priority = new SimpleStringProperty(priority);
-        this.dueDate = new SimpleObjectProperty<>(dueDate); //StringProperty (without the simple) is abstract, with Simple being the concrete class that implements/inherits the StringProperty
+        this.dueDate = new SimpleObjectProperty<>(dueDate);
         this.trashCanImage = new SimpleObjectProperty<>(image);
         this.checked = new SimpleBooleanProperty(checked);
     }
@@ -84,8 +95,4 @@ public class TaskModel {
     public boolean getCheckedValue(){ return checked.getValue(); }
 
     public void setChecked(boolean check) {this.checked.setValue(check);}
-
-    void print(){
-        System.out.println(this.task + ", " + this.status + ", " + this.priority + ", " + this.dueDate);
-    }
 }

@@ -5,8 +5,13 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-
 import java.time.LocalDate;
+
+/*
+* CustomDialog extends Dialog class. It is a custom implementation of the Dialog class.
+* It is extended so a custom dialog class can be created. The pop-up dialog of adding a
+* new task and editing a task are made from this class.
+* */
 
 public class CustomDialog extends Dialog<TaskModel> {
 
@@ -21,7 +26,6 @@ public class CustomDialog extends Dialog<TaskModel> {
     private DatePicker dueDatePicker = new DatePicker(LocalDate.now());
     private Label[] labels = {taskLabel, statusLabel, priorityLabel, dueDateLabel};;
     private Control[] inputs = {taskInput, statusOptions, priorityOptions, dueDatePicker};
-
     private String textPrimaryButton;
 
     public CustomDialog(GridPane pane){
@@ -33,7 +37,6 @@ public class CustomDialog extends Dialog<TaskModel> {
         addInputsToPane();
         modifyInputs();
 
-        // Styling of dialog
         this.getDialogPane().getStyleClass().add("myDialog");
         this.taskInput.getStyleClass().add("textInput");
         this.statusOptions.getStyleClass().add("options");
@@ -73,11 +76,11 @@ public class CustomDialog extends Dialog<TaskModel> {
         this.priorityOptions.getSelectionModel().selectFirst();
     }
 
-    public void setMyOwnHeaderText(String header){ //be called in Main
+    public void setMyOwnHeaderText(String header){
         this.setHeaderText(header);
     }
 
-    public void setHeaderTextPrimaryButton(String header){ //be called in Main
+    public void setHeaderTextPrimaryButton(String header){
         this.textPrimaryButton = header;
     }
 
@@ -94,8 +97,8 @@ public class CustomDialog extends Dialog<TaskModel> {
         ButtonType cancelButton = createCancelButton();
 
         this.getDialogPane().getButtonTypes().addAll(primaryButton, cancelButton);
-        this.getDialogPane().lookupButton(primaryButton).setId("primaryButton"); // prev value addButton
-        this.getDialogPane().lookupButton(cancelButton).setId("cancelButton"); //
+        this.getDialogPane().lookupButton(primaryButton).setId("primaryButton");
+        this.getDialogPane().lookupButton(cancelButton).setId("cancelButton");
     }
 
     public void buildDialog(){

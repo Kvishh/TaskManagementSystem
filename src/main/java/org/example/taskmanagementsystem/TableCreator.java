@@ -6,10 +6,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+/*
+* This is the class where the table is created and its columns are built.
+* This is also where the columns' cells are built. The type they will
+* hold and how they should be displayed in the cell are designed here.
+* */
 
 public class TableCreator {
 
@@ -54,8 +59,17 @@ public class TableCreator {
         });
     }
 
+    /*
+    * Responsible for creating the Id column. In the table this is not visible,
+    * this column is set to not be visible since it is only used for updating or
+    * deleting the row in the database. The user does not need to see this.
+    * */
     private void buildIdColumn(){
+
+        // This method is responsible for specifying what type should the cell hold
         this.idColumn.setCellValueFactory(i -> i.getValue().getIdProperty());
+
+        // This is responsible for rendering the item in the cell
         this.idColumn.setCellFactory(x -> {
             return new TableCell<TaskModel, Number>(){
                 @Override
@@ -73,6 +87,11 @@ public class TableCreator {
         this.idColumn.setVisible(false);
     }
 
+    /*
+    * Responsible for creating the Done column which the checkbox.
+    * The whole row where the checkbox is checked loses a bit of
+    * opacity when user ticks the checkbox.
+    * */
     private void buildDoneColumn(){
         this.doneColumn.setCellValueFactory(d -> d.getValue().getCheckedProperty());
         this.doneColumn.setCellFactory(x -> {
@@ -93,6 +112,8 @@ public class TableCreator {
                 }
             };
 
+            // This block of code listens to the event when user ticks the checkbox
+            // to update the database.
             checkBox.selectedProperty().addListener(((observableValue, aBoolean, t1) -> {
                 cell.getTableRow().getItem().setChecked(t1);
                 boolean isChecked =  cell.getTableRow().getItem().getCheckedValue();
@@ -112,6 +133,10 @@ public class TableCreator {
         this.doneColumn.getStyleClass().add("col-justify");
     }
 
+    /*
+     * Responsible for creating the Task column. Its cells have an event handler when
+     * user double-clicks the cell, it pop-ups an edit dialog.
+     * */
     private void buildTaskColumn(){
         this.taskColumn.setCellValueFactory(t -> t.getValue().getTaskProperty());
         this.taskColumn.setCellFactory(x -> {
@@ -127,6 +152,8 @@ public class TableCreator {
                 }
             };
 
+            // This is the method responsible for listening to the double-clicked
+            // It selects the row clicked when the user clicks it once
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked task");
                 TaskModel rowItem = this.table.getSelectionModel().getSelectedItem();
@@ -141,6 +168,10 @@ public class TableCreator {
         this.taskColumn.getStyleClass().add("col-left-center");
     }
 
+    /*
+     * Responsible for creating the Status column. Its cells have an event handler when
+     * user double-clicks the cell, it pop-ups an edit dialog.
+     * */
     private void buildStatusColumn(){
         this.statusColumn.setCellValueFactory(s -> s.getValue().getStatusProperty());
         this.statusColumn.setCellFactory(x -> {
@@ -156,6 +187,8 @@ public class TableCreator {
                 }
             };
 
+            // This is the method responsible for listening to the double-clicked
+            // It selects the row clicked when the user clicks it once
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked status");
                 TaskModel rowItem = this.table.getSelectionModel().getSelectedItem();
@@ -171,11 +204,17 @@ public class TableCreator {
         this.statusColumn.getStyleClass().add("col-justify");
     }
 
+    /*
+     * Responsible for creating the Priority column. Its cells have an event handler when
+     * user double-clicks the cell, it pop-ups an edit dialog.
+     * */
     private void buildPriorityColumn(){
         this.priorityColumn.setCellValueFactory(p -> p.getValue().getPriorityProperty());
         this.priorityColumn.setCellFactory(x -> {
 
             TableCell<TaskModel, String> cell = new TableCell<>() {
+
+                // This code displays the text user chose when adding a task
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -197,6 +236,8 @@ public class TableCreator {
                 }
             };
 
+            // This is the method responsible for listening to the double-clicked
+            // It selects the row clicked when the user clicks it once
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked priority");
                 TaskModel rowItem = this.table.getSelectionModel().getSelectedItem();
@@ -212,6 +253,10 @@ public class TableCreator {
         this.priorityColumn.getStyleClass().add("col-justify");
     }
 
+    /*
+     * Responsible for creating the Due Date column. Its cells have an event handler when
+     * user double-clicks the cell, it pop-ups an edit dialog.
+     * */
     private void buildDueDateColumn(){
         this.dueDateColumn.setCellValueFactory(d -> d.getValue().getDueDateProperty());
         this.dueDateColumn.setCellFactory(x -> {
@@ -228,6 +273,8 @@ public class TableCreator {
                 }
             };
 
+            // This is the method responsible for listening to the double-clicked
+            // It selects the row clicked when the user clicks it once
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 System.out.println("Clicked due date");
                 TaskModel rowItem = this.table.getSelectionModel().getSelectedItem();
@@ -243,6 +290,10 @@ public class TableCreator {
         this.dueDateColumn.getStyleClass().add("col-justify");
     }
 
+    /*
+     * Responsible for creating the Delete column. Its cells have an event handler when
+     * user clicks the cell, it deletes the row and also deletes the row in the database
+     * */
     private void buildDeleteColumn(){
         this.deleteColumn.setCellValueFactory(d -> d.getValue().getTrashCanImageProperty());
         this.deleteColumn.setCellFactory(x -> {
@@ -261,6 +312,9 @@ public class TableCreator {
                 }
             };
 
+            /*
+            * Responsible for deleting the row, it listens to user when it clicks the cell once
+            * */
             cell.addEventHandler(MouseEvent.MOUSE_CLICKED, evt -> {
                 try {
                     System.out.println("Clicked delete");
@@ -281,6 +335,8 @@ public class TableCreator {
         this.deleteColumn.getStyleClass().add("col-justify");
     }
 
+    // It is responsible for showing the edit dialog when user double-clicks a row
+    // that shows edit dialog (i.e. Task, Status, Priority, and Due Date columns)
     private void showEditDialog(TaskModel rowItem) {
         try {
             this.customDialog.getAndSetTaskRow(rowItem.getTaskValue());
